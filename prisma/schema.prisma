@@ -1,0 +1,30 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+model User {
+  id        String   @id @default(cuid()) // Will be overridden with auth users' id
+  email     String   @unique @db.VarChar
+  name      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  chats     Chat[]   @relation("UserChats", onDelete: Cascade)
+
+  // Create a relation to connect auth.users.id with public.user.id
+  authId    String   @unique // This will store the auth ID from Supabase Auth (auth.users.id)
+}
+
+model Chat {
+  id        String   @id @default(cuid())
+  userId    String
+  role      String
+  content   String
+  createdAt DateTime @default(now())
+  
+  user      User     @relation("UserChats", fields: [userId], references: [id], onDelete: Cascade)
+}
