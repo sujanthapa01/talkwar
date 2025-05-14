@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import React, {
   createContext,
@@ -6,8 +6,9 @@ import React, {
   useEffect,
   useState,
   ReactNode,
-} from 'react';
-import { createClient } from '@/lib/supabase';
+} from "react";
+
+import { createClient } from "@/lib/supabase";
 
 type UserType = {
   name: string;
@@ -34,14 +35,14 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       if (currentUser) {
         const name =
           currentUser.user_metadata?.name ||
-          currentUser.email?.split('@')[0] ||
-          'Unknown';
+          currentUser.email?.split("@")[0] ||
+          "Unknown";
 
-        const avatarUrl = currentUser.user_metadata?.avatar_url || '';
+        const avatarUrl = currentUser.user_metadata?.avatar_url || "";
 
         setUser({
           name,
-          email: currentUser.email || 'unknown@example.com',
+          email: currentUser.email || "unknown@example.com",
           avatarUrl,
         });
       }
@@ -52,7 +53,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
-    location.href = '/login';
+    location.href = "/login";
   };
 
   return (
@@ -64,8 +65,10 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
 
 export const useUser = () => {
   const context = useContext(UserContext);
-  if (!context){
-    throw new Error('useUser must be used within a UserProvider');
+
+  if (!context) {
+    throw new Error("useUser must be used within a UserProvider");
   }
+
   return context;
 };

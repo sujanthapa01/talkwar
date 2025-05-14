@@ -16,7 +16,6 @@ export const siteConfig = {
       label: "Pricing",
       href: "/pricing",
     },
-
   ],
   navMenuItems: [
     {

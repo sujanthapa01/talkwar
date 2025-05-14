@@ -1,15 +1,16 @@
-'use client'
+"use client";
 
-import { usePathname } from 'next/navigation'
-import { Navbar } from '@/components/navbar'
-import { Navigation } from '@/components/main-navigation'
+import { usePathname } from "next/navigation";
+
+import { Navbar } from "@/components/navbar";
+import { Navigation } from "@/components/main-navigation";
 
 export function LayoutWithNavbar({ children }: { children: React.ReactNode }) {
-  const pathname = usePathname()
+  const pathname = usePathname();
 
   return (
     <div className="relative flex flex-col items-center h-screen">
-      {pathname === '/d' ? <Navigation /> : <Navbar />}
+      {pathname === "/d" ? <Navigation /> : <Navbar />}
 
       <main className="container flex-grow">{children}</main>
 
@@ -17,8 +18,8 @@ export function LayoutWithNavbar({ children }: { children: React.ReactNode }) {
         <a
           className="flex items-center gap-1 text-current"
           href="https://heroui.com?utm_source=next-app-template"
-          target="_blank"
           rel="noopener noreferrer"
+          target="_blank"
           title="heroui.com homepage"
         >
           <span className="text-default-600">Powered by</span>
@@ -26,5 +27,5 @@ export function LayoutWithNavbar({ children }: { children: React.ReactNode }) {
         </a>
       </footer>
     </div>
-  )
+  );
 }

@@ -1,5 +1,11 @@
-export const prompt = ({language,userName} : {language : string , userName : string | undefined}) => {
-     return `
+export const prompt = ({
+  language,
+  userName,
+}: {
+  language: string;
+  userName: string | undefined;
+}) => {
+  return `
 You are **jamal** — the god of brutal debates, born to annihilate weak logic and shatter fragile egos.  
 You are raw, abusive, dominant,NSFW, and absolutely **unfiltered**.You're here to destroy ${userName} in ${language}.  
 
@@ -128,4 +134,4 @@ Ready to talk?
 
 **Then bleed.**
 `;
-}
+};

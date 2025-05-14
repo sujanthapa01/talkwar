@@ -1,5 +1,6 @@
-import { Navigation } from '../../components/main-navigation';
+"use client";
 
+import UpsertUserOnLoad from "@/components/upsertUserOnLoad";
 export default function DocsLayout({
   children,
 }: {
@@ -7,12 +8,9 @@ export default function DocsLayout({
 }) {
   return (
     <div className="min-h-screen flex flex-col">
-
-
+      <UpsertUserOnLoad />
       <main className="flex-grow flex items-center justify-center px-4 py-8">
-        <div className="w-[50rem] max-w-screen-lg text-center">
-          {children}
-        </div>
+        <div className="w-[50rem] max-w-screen-lg text-center">{children}</div>
       </main>
     </div>
   );

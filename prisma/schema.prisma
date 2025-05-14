@@ -7,16 +7,16 @@ datasource db {
   url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
 }
+
+
 model User {
-  id        String   @id @default(cuid()) // Will be overridden with auth users' id
+  id        String   @id @default(cuid()) 
   email     String   @unique @db.VarChar
   name      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  chats     Chat[]   @relation("UserChats", onDelete: Cascade)
-
-  // Create a relation to connect auth.users.id with public.user.id
-  authId    String   @unique // This will store the auth ID from Supabase Auth (auth.users.id)
+  chats     Chat[]   @relation("UserChats")
+  authId    String   @unique                
 }
 
 model Chat {
@@ -25,6 +25,6 @@ model Chat {
   role      String
   content   String
   createdAt DateTime @default(now())
-  
+
   user      User     @relation("UserChats", fields: [userId], references: [id], onDelete: Cascade)
 }
