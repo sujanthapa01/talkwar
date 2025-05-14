@@ -8,7 +8,7 @@ import {
 } from '@heroui/navbar'
 import { Dropdown, DropdownTrigger, DropdownMenu, DropdownItem } from '@heroui/dropdown'
 
-import { useUser } from '@/context/useContext'
+import { useUser } from '@/context/userContext'
 
 export const Navigation = () => {
   const currUser = useUser()

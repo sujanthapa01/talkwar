@@ -3,12 +3,14 @@ import { useState, useEffect, useRef } from "react";
 import { Input, Button, Card, CardBody } from "@nextui-org/react";
 import { PaperAirplaneIcon, BookmarkIcon } from "@heroicons/react/24/solid";
 import { ScrollShadow } from "@heroui/scroll-shadow";
-import { useUser } from "@/context/useContext";
+import { useUser } from "@/context/userContext";
+import {useSessionContext} from '@/context/sessionContext'
 import { Avatar } from "@heroui/avatar";
 import { Skeleton } from "@heroui/skeleton";
 import ReactMarkdown from "react-markdown";
 import { Select, SelectItem } from "@heroui/select";
 import { title, subtitle } from "@/components/primitives";
+// import {createClient} from '@/lib/supabase'
 
 type Message = {
   role: "user" | "assistant";
@@ -22,6 +24,11 @@ export default function ChatUI() {
   const user = useUser();
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [language, setLanguage] = useState<string>("");
+
+const session = useSessionContext()
+const username = session.user?.user_metadata.full_name
+const avatar = session.user?.user_metadata?.avatar_url
+console.log(avatar)
 
   const languages = [
     { key: "Hindi", label: "Hindi" },
@@ -50,7 +57,7 @@ export default function ChatUI() {
 
     setMessages([...updatedMessages, { role: "assistant", content: "Thinking..." }]);
 
-    const userName: string | undefined = user?.user?.name
+    const userName: string | undefined = username
 
     try {
       const res = await fetch("/api/chat", {
@@ -99,13 +106,13 @@ export default function ChatUI() {
       {messages.length === 0 ? (
         <Card className="flex-1 flex items-center justify-center bg-gradient-to-br from-[#1e1b4b] via-[#312e81] to-[#4f46e5] shadow-2xl border border-indigo-700/20 rounded-xl">
           <CardBody className="flex flex-col items-center justify-center gap-4 text-center text-white">
-            <Skeleton isLoaded={!!user?.user?.avatarUrl} className="rounded-full h-54 w-54">
-              <img
-                src={user?.user?.avatarUrl}
+          <Skeleton isLoaded={Boolean(avatar)} className="rounded-full p-8">
+             {avatar ? ( <img
+                src={avatar}
                 alt="profile"
                 className="h-54 w-54 rounded-full p-2 border-2 border-white shadow-lg"
-              />
-            </Skeleton>
+              />) : (<>loading..</>) }
+          </Skeleton>
             <h2 className="text-xl font-semibold"> <span className="text-[3rem]"></span> <span className={title({ color: "violet" })}> {user?.user?.name || "there"}</span> ,</h2>
             <p className={subtitle({ class: "mt-4" })}>Ready to start a debate?</p>
 
@@ -172,9 +179,9 @@ export default function ChatUI() {
                     </div>
 
                     {msg.role === "user" && (
-                      <Skeleton isLoaded={!!user?.user?.avatarUrl} className="rounded-full h-34 w-34">
+                      <Skeleton isLoaded={Boolean(avatar)} className="rounded-full h-34 w-34">
                         <Avatar
-                          src={user?.user?.avatarUrl}
+                          src={avatar}
                           alt="User Avatar"
                           className="h-12 w-12 rounded-full border-white border-2 hover:shadow-[0_0_15px_rgba(255,255,255,0.3)] transition"
                         />
@@ -197,7 +204,7 @@ export default function ChatUI() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="write something..."
-              className="flex-1 bg-white/10"
+              className="flex-1 "
               classNames={{
                 inputWrapper: " backdrop-blur-md border border-white/20 text-white caret-black",
               }}
@@ -210,7 +217,7 @@ export default function ChatUI() {
               className="transition-transform hover:scale-110"
             >
 
-              <PaperAirplaneIcon className="w-5 h-5 text-white" />
+              <PaperAirplaneIcon className="w-5 h-5 text-black" />
             </Button>
 
             <Button
@@ -221,7 +228,7 @@ export default function ChatUI() {
               className="transition-transform hover:scale-110"
             >
 
-              <BookmarkIcon className="w-5 h-5 text-white" />
+              <BookmarkIcon className="w-5 h-5 text-black" />
             </Button>
 
 

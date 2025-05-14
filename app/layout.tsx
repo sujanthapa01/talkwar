@@ -5,7 +5,6 @@ import { Providers } from "./providers";
 import { LayoutWithNavbar } from "@/components/LayoutWithNavbar";
 import { siteConfig } from "@/config/site";
 import { fontSans } from "@/config/fonts";
-import {UserProvider} from '@/context/useContext'
 export const metadata: Metadata = {
   title: {
     default: siteConfig.name,
@@ -39,9 +38,7 @@ export default function RootLayout({
         )}
       >
         <Providers themeProps={{ attribute: "class", defaultTheme: "dark" }}>
-          <UserProvider>
             <LayoutWithNavbar>{children}</LayoutWithNavbar>
-          </UserProvider>
         </Providers>
       </body>
     </html>
