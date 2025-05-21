@@ -9,8 +9,10 @@ import ReactMarkdown from "react-markdown";
 import { Select, SelectItem } from "@heroui/select";
 
 import { useSessionContext } from "@/context/sessionContext";
-import { useUser } from "@/context/userContext";
+import { useAuth } from "@/context/authContext";
 import { title, subtitle } from "@/components/primitives";
+import axios from "axios";
+
 // import {createClient} from '@/lib/supabase'
 
 type Message = {
@@ -22,11 +24,12 @@ export default function ChatUI() {
   const [input, setInput] = useState("");
   const [messages, setMessages] = useState<Message[]>([]);
   const [loading, setLoading] = useState(false);
-  const user = useUser();
+  const user = useAuth();
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const [language, setLanguage] = useState<string>("");
 
   const session = useSessionContext();
+
   const username = session.user?.user_metadata.full_name;
   const avatar = session.user?.user_metadata?.avatar_url;
 
@@ -48,6 +51,7 @@ export default function ChatUI() {
   }, [messages]);
 
   const sendMessage = async (msg?: string) => {
+
     const messageContent = msg || input.trim();
 
     if (!messageContent) return;
@@ -108,16 +112,33 @@ export default function ChatUI() {
               content: assistantMessage,
             };
           }
-
+          console.log("messeges:", messages)
+          console.log("newMesseges: ", newMessages)
           return newMessages;
         });
       }
+
     } catch (err) {
       console.error("Error while sending message:", err);
     } finally {
       setLoading(false);
     }
   };
+
+
+
+  const bookMark = async (): Promise<any> => {
+    console.log("bookMark", messages, )
+      await axios.post('/api/bookmark', { 
+      authid: user?.user?.uid,
+      message: messages,
+    })
+  }
+
+
+
+
+
 
   return (
     <div className="mx-auto h-[80vh] flex flex-col gap-4 p-4 bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#334155] text-white rounded-lg shadow-lg">
@@ -162,10 +183,9 @@ export default function ChatUI() {
               className={` w-[12rem] h-[3rem] bg-black rounded-full`}
               onClick={() =>
                 sendMessage(
-                  `${
-                    language === "English"
-                      ? `Hey loser Who you think you are a debate looser once a losser always a looser`
-                      : `Oy loser mera naam ${user?.user?.name || "Guest"}.`
+                  `${language === "English"
+                    ? `Hey loser Who you think you are a debate looser once a losser always a looser`
+                    : `Oy loser mera naam ${user?.user?.name || "Guest"}.`
                   }`,
                 )
               }
@@ -196,14 +216,13 @@ export default function ChatUI() {
                     )}
 
                     <div
-                      className={`rounded-lg px-4 py-2 text-sm max-w-xs ${
-                        msg.role === "user"
-                          ? "bg-blue-600 text-white"
-                          : "bg-white/20 text-white backdrop-blur-sm"
-                      }`}
+                      className={`rounded-lg px-4 py-2 text-sm max-w-xs ${msg.role === "user"
+                        ? "bg-blue-600 text-white"
+                        : "bg-white/20 text-white backdrop-blur-sm"
+                        }`}
                     >
                       {msg.role === "assistant" &&
-                      msg.content === "Thinking..." ? (
+                        msg.content === "Thinking..." ? (
                         <span className="italic text-gray-300 animate-pulse">
                           Thinking...
                         </span>
@@ -254,7 +273,7 @@ export default function ChatUI() {
               isDisabled={loading}
               type="submit"
             >
-              <PaperAirplaneIcon className="w-5 h-5 text-black" />
+              <PaperAirplaneIcon className="w-5 h-5 " />
             </Button>
 
             <Button
@@ -263,8 +282,9 @@ export default function ChatUI() {
               color="primary"
               isDisabled={loading}
               type="submit"
+              onPress={bookMark}
             >
-              <BookmarkIcon className="w-5 h-5 text-black" />
+              <BookmarkIcon className="w-5 h-5 " />
             </Button>
           </form>
         </>

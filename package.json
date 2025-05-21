@@ -6,7 +6,8 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint --fix"
+    "lint": "eslint --fix",
+    "prisma" : "npx prisma generate && npx primsa db push && npx prisma migrate dev"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",

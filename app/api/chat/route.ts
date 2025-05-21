@@ -6,8 +6,6 @@ import {
   SystemMessage,
   AIMessage,
 } from "@langchain/core/messages";
-
-import { prisma } from "@/lib/prismaClient";
 import { prompt } from "@/config/prompt";
 
 const createModel = () => {
@@ -90,41 +88,9 @@ export async function POST(req: NextRequest) {
 
           controller.close();
 
-          // Save user + assistant message to DB
-          const lastUserMessage = messages[messages.length - 1];
+        
 
-          if (lastUserMessage?.role === "user" && userId) {
-            try {
-              // Find the user first
-              const user = await prisma.user.findUnique({
-                where: { id: userId },
-              });
-
-              if (user) {
-                // Create user message
-                await prisma.chat.create({
-                  data: {
-                    userId: user.id,
-                    role: "user",
-                    content: lastUserMessage.content,
-                  },
-                });
-
-                // Create assistant message
-                await prisma.chat.create({
-                  data: {
-                    userId: user.id,
-                    role: "assistant",
-                    content: fullText,
-                  },
-                });
-              } else {
-                console.error("User not found:", userId);
-              }
-            } catch (dbError) {
-              console.error("Failed to save chat to database:", dbError);
-            }
-          }
+       
         } catch (err: any) {
           controller.enqueue(encoder.encode(`Error: ${err.message}`));
           controller.close();

@@ -9,10 +9,10 @@ import {
   DropdownItem,
 } from "@heroui/dropdown";
 
-import { useUser } from "@/context/userContext";
+import { useAuth } from "@/context/authContext";
 
 export const Navigation = () => {
-  const currUser = useUser();
+  const currUser = useAuth();
 
   useEffect(() => {
     if (currUser) {

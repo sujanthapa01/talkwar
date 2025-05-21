@@ -1,74 +1,38 @@
-"use client";
+// import { User } from "lucide-react";
+// import React, { createContext, useContext, useState } from "react";
+// import { createClient } from "@/lib/supabase";
+// type UserContextType = {
 
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  ReactNode,
-} from "react";
+//     id: string
+//     emai: string
+//     name: string
+//     createdAt: string
+//     updatedAt: string
+//     authid: string
 
-import { createClient } from "@/lib/supabase";
+// }
 
-type UserType = {
-  name: string;
-  email: string;
-  avatarUrl?: string;
-};
+// const userContext = createContext<UserContextType | null>(null);
 
-type UserContextType = {
-  user: UserType | null;
-  handleLogout: () => Promise<void>;
-};
 
-const UserContext = createContext<UserContextType | null>(null);
+// export const UserContext = ({ children }: { children: React.ReactNode }) => {
 
-export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<UserType | null>(null);
-  const supabase = createClient();
+//     const [userData, setUserData] = useState<UserContextType | null>(null)
 
-  useEffect(() => {
-    const getUser = async () => {
-      const { data } = await supabase.auth.getUser();
-      const currentUser = data?.user;
+//     const supabase = createClient();
 
-      if (currentUser) {
-        const name =
-          currentUser.user_metadata?.name ||
-          currentUser.email?.split("@")[0] ||
-          "Unknown";
+//     try {
 
-        const avatarUrl = currentUser.user_metadata?.avatar_url || "";
+// await supabase.from.u
 
-        setUser({
-          name,
-          email: currentUser.email || "unknown@example.com",
-          avatarUrl,
-        });
-      }
-    };
+//     }
 
-    getUser();
-  }, []);
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    location.href = "/login";
-  };
+//     return (
+//         <userContext.Provider value={{}}>
+//             {children}
+//         </userContext.Provider>
+//     )
 
-  return (
-    <UserContext.Provider value={{ user, handleLogout }}>
-      {children}
-    </UserContext.Provider>
-  );
-};
 
-export const useUser = () => {
-  const context = useContext(UserContext);
-
-  if (!context) {
-    throw new Error("useUser must be used within a UserProvider");
-  }
-
-  return context;
-};
+// }

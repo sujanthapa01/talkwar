@@ -8,23 +8,22 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-
 model User {
-  id        String   @id @default(cuid()) 
-  email     String   @unique @db.VarChar
+  id        String     @id @default(cuid())
+  email     String     @unique @db.VarChar
   name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  chats     Chat[]   @relation("UserChats")
-  authId    String   @unique                
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  bookmark  Bookmark[] @relation("UserBookmark")
+  authId    String     @unique
 }
 
-model Chat {
+
+model Bookmark {
   id        String   @id @default(cuid())
   userId    String
-  role      String
-  content   String
+  messeges  String[]
+  user      User     @relation("UserBookmark", fields: [userId], references: [id])
   createdAt DateTime @default(now())
-
-  user      User     @relation("UserChats", fields: [userId], references: [id], onDelete: Cascade)
+  updatedAt DateTime @updatedAt
 }
